@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'me.tatarka.retrolambda'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.doudou.cn.testretrofit"
-        minSdkVersion 21
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -19,10 +19,17 @@ android {
     }
 
 
-
-
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    //测试 Rxjava 技术内容
+    compile 'io.reactivex:rxjava:1.1.2'
+
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+
+    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+// 添加适配
+    compile 'io.reactivex:rxandroid:1.1.0'
 }

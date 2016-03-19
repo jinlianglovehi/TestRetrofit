@@ -2,36 +2,44 @@ package com.doudou.cn.testretrofit;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+
+import com.doudou.cn.testretrofit.model.PeopleResponse;
+import com.google.gson.Gson;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends Activity {
+    final String URL = "http://api.randomuser.me/?results=10&nat=en";
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        RetrofitTools.getInstance().getAPIService()
+                     .fetchPeople(URL)
+                     .subscribeOn(Schedulers.io())
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .subscribe(list -> handData(list), error -> handError("加载数据失败"));
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    private void handError(String str) {
+        Log.i(TAG, "handError 处理加载失败处理");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+    private PeopleResponse handData(PeopleResponse list) {
 
-        return super.onOptionsItemSelected(item);
+        String result = new Gson().toJson(list);
+        Log.i(TAG, "handData 加载成功后数据：" + result);
+        return null;
     }
+
 }
